@@ -41,17 +41,18 @@ fully isolated — a pool can only ever pay out what was deposited to it.
 
 Any amount paid above the fee seeds the new pool's operating balance.
 
-**Operating fee** — 100,000 QU per pool per epoch, same 70/15/15 split as
-above. Drawn automatically from the pool's operating balance (topped up via
-`depositOperating`). A pool that falls behind is paused for up to 2 missed
-epochs, then deactivated — on deactivation, all remaining pots and leftover
-operating balance are refunded to the pool admin, so nothing is stranded.
+**Operating fee** — 25,000 QU per pool per epoch (~weekly, on mainnet epoch
+cadence), same 70/15/15 split as above. Drawn automatically from the pool's
+operating balance (topped up via `depositOperating`). A pool that falls
+behind is paused for up to 2 missed epochs, then deactivated — on
+deactivation, all remaining pots and leftover operating balance are
+refunded to the pool admin, so nothing is stranded.
 
 **Fee caps.** The platform owner can tune the creation and operating fees
-via `setPlatformParams`, but both are hardwired to a ceiling of **10x their
-default** (50,000,000 QU and 1,000,000 QU respectively). Any call that would
-push a fee past that ceiling is rejected outright — a compromised or
-malicious owner key can raise fees, but never beyond that hardwired cap.
+via `setPlatformParams`, but both are hardwired to a ceiling equal to
+today's default — 5,000,000 QU and 25,000 QU respectively. In practice this
+means the owner can only ever lower these fees from here, never raise them:
+any call that would push a fee above its current value is rejected outright.
 
 ## Contents
 

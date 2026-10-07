@@ -419,8 +419,8 @@ TEST(ContractQRewards, RefundOnDeactivation)
     increaseEnergy(QR_ADMIN, 10000000000ULL);
     increaseEnergy(QR_FUND, 5000000000ULL);
 
-    // 50,000 operating buffer (< 100,000 fee) so the pool pauses from the first END_EPOCH.
-    uint64 pool = t.createPool(QR_ADMIN, 0, QREWARDS_DEFAULT_CREATE_FEE + 50000ULL);
+    // 10,000 operating buffer (< 25,000 fee) so the pool pauses from the first END_EPOCH.
+    uint64 pool = t.createPool(QR_ADMIN, 0, QREWARDS_DEFAULT_CREATE_FEE + 10000ULL);
     t.depositQU(QR_FUND, pool, 10000ULL); // pot 9500 (fee 500)
     EXPECT_EQ(t.getState()->poolPot(pool, 0), 9500u);
 
@@ -431,8 +431,8 @@ TEST(ContractQRewards, RefundOnDeactivation)
     long long adminBefore = getBalance(QR_ADMIN);
     t.endEpoch(); // missed 3 > MAX -> deactivate + refund to admin
     EXPECT_EQ(t.getState()->poolActive(pool), 0);
-    // Refund = pot (9500) + leftover operating balance (50000) = 59500.
-    EXPECT_EQ(getBalance(QR_ADMIN) - adminBefore, 59500LL);
+    // Refund = pot (9500) + leftover operating balance (10000) = 19500.
+    EXPECT_EQ(getBalance(QR_ADMIN) - adminBefore, 19500LL);
     EXPECT_EQ(t.getState()->poolPot(pool, 0), 0u);
 }
 
