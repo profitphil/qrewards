@@ -21,9 +21,37 @@ fully isolated — a pool can only ever pay out what was deposited to it.
 - **NFT-weighted pools.** A pool can also weight by held NFTs from a
   registered collection, via an admin-curated catalog with round-robin
   snapshot spreading for pools with many NFTs.
-- **Fees.** 5% on every dividend deposit, 5,000,000 QU to create a pool,
-  100,000 QU/epoch operating fee — all platform fees are capped and only
-  adjustable downward from their default by the platform owner.
+
+## Fees
+
+**Dividend fee** — 5% of every deposit into a pool (QU or token), split 80/20:
+| Share | Goes to |
+|---|---|
+| 20% | QREWARDS shareholders |
+| 80% | QPAYHUB's dividend account (QU deposits) or the QRaffle charity address (token deposits) |
+
+95% of every deposit reaches the pool's holders.
+
+**Pool creation fee** — 5,000,000 QU default, split 70/15/15:
+| Share | Goes to |
+|---|---|
+| 70% | QREWARDS shareholders |
+| 15% | QPAYHUB address |
+| 15% | Burned |
+
+Any amount paid above the fee seeds the new pool's operating balance.
+
+**Operating fee** — 100,000 QU per pool per epoch, same 70/15/15 split as
+above. Drawn automatically from the pool's operating balance (topped up via
+`depositOperating`). A pool that falls behind is paused for up to 2 missed
+epochs, then deactivated — on deactivation, all remaining pots and leftover
+operating balance are refunded to the pool admin, so nothing is stranded.
+
+**Fee caps.** The platform owner can tune the creation and operating fees
+via `setPlatformParams`, but both are hardwired to a ceiling of **10x their
+default** (50,000,000 QU and 1,000,000 QU respectively). Any call that would
+push a fee past that ceiling is rejected outright — a compromised or
+malicious owner key can raise fees, but never beyond that hardwired cap.
 
 ## Contents
 
