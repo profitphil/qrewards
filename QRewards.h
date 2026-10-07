@@ -57,14 +57,14 @@ constexpr uint32 QREWARDS_MAX_WEIGHT_BPS       = 1000000;        // cap weight a
 constexpr uint64 QREWARDS_MAX_LIST_WEIGHT      = 1000000000000ULL; // 1e12: per-recipient list weight cap
                                                                    // (keeps pot*weight well within uint128; ample for any pro-rata scheme)
 constexpr uint64 QREWARDS_DEFAULT_CREATE_FEE   = 5000000ULL;     // 5M QU to create a pool; protocol-owner tunable
-constexpr uint64 QREWARDS_DEFAULT_OPERATING_FEE = 100000ULL;     // 100k QU/epoch per pool; protocol-owner tunable
+constexpr uint64 QREWARDS_DEFAULT_OPERATING_FEE = 25000ULL;      // 25k QU per pool per epoch (~weekly on mainnet epoch cadence); protocol-owner tunable
 // Hardwired ceilings on setPlatformParams: the platformOwner can move either fee anywhere in
-// [0, cap] -- raise or lower -- but never past the cap. Without this, a single owner key could
-// set operatingFee arbitrarily high and instantly starve every pool's operatingBalance platform-
-// wide, mass-pausing (then mass-deactivating) every pool at the next END_EPOCH with no recovery
-// window. 10x the default leaves real room to tune fees without allowing a platform-wide DoS.
-constexpr uint64 QREWARDS_MAX_CREATE_POOL_FEE  = QREWARDS_DEFAULT_CREATE_FEE * 10;
-constexpr uint64 QREWARDS_MAX_OPERATING_FEE    = QREWARDS_DEFAULT_OPERATING_FEE * 10;
+// [0, cap] -- i.e. only ever reduce it from here, never raise it -- since the cap is pinned to
+// today's default. Without this, a single owner key could set operatingFee arbitrarily high and
+// instantly starve every pool's operatingBalance platform-wide, mass-pausing (then mass-
+// deactivating) every pool at the next END_EPOCH with no recovery window.
+constexpr uint64 QREWARDS_MAX_CREATE_POOL_FEE  = QREWARDS_DEFAULT_CREATE_FEE;
+constexpr uint64 QREWARDS_MAX_OPERATING_FEE    = QREWARDS_DEFAULT_OPERATING_FEE;
 
 // NFT-backed weight (QBAY integration): a pool admin can register individual QBAY NFT ids as an
 // additional weight source, combined with the fungible-asset registry in holdings mode (not
